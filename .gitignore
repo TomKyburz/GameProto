@@ -1,0 +1,15 @@
+coverage
+*.lcov
+test-report.html
+.nyc_output
+# Dependency directories
+node_modules/
+# Optional npm cache directory
+.npm
+# Build output, Webpack, and SAM output
+dist
+# DynamoDB Local files
+# Mac files
+.DS_Store
+# IDE settings
+.vscode/

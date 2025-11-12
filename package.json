@@ -1,0 +1,36 @@
+{
+  "name": "gameproto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomKyburz/GameProto.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TomKyburz/GameProto/issues"
+  },
+  "homepage": "https://github.com/TomKyburz/GameProto#readme",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "prettier": "^3.6.2"
+  },
+  "lint-staged": {
+    "*.{mjs,js,json,ts,mts,md,yaml,yml}": [
+      "npx prettier --write"
+    ]
+  },
+  "lint-staged-ignore": [
+    "./package-lock.json",
+    "node_modules/**/*"
+  ]
+}

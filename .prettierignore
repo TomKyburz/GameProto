@@ -1,0 +1,5 @@
+.vscode/
+coverage/
+dist/
+package-lock.json
+README.md
