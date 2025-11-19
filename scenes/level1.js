@@ -1,52 +1,89 @@
 class GameScene extends Phaser.Scene {
-  constructor() {
-    super('GameScene')
-  }
+    constructor() {
+        super('GameScene');
+        this.SpawnX = 0;
+        this.SpawnY = 0;
+}
 
-  create() {
-    this.cameras.main.fadeIn(500, 0, 0, 0)
-    this.add.image(960, 540, 'nyc').setSize(1920, 1080)
-    this.platforms = this.physics.add.staticGroup()
-    this.pillars = this.physics.add.staticGroup()
-    this.scene.run('UIScene')
-    this.platforms.create(960, 1048, 'ground').setScale(15, 5).refreshBody()
-    this.pillars.create(1920, 836, 'pillar').setScale(1, 1).refreshBody()
-    const touchArea = this.add.rectangle(0, 0, 960, 1080).setOrigin(0, 0).setDepth(100).setInteractive()
-    const touchArea2 = this.add.rectangle(960, 0, 960, 1080).setOrigin(0, 0).setDepth(100).setInteractive()
-    this.p = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P)
-    this.t = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T)
-    this.player = new Player(this, 100, 841)
-    this.physics.add.collider(this.player, this.platforms)
-    this.physics.add.collider(this.player, this.pillars, this.enterPortal, null, this)
+    init(data) {
+      this.SpawnX = data.spawnX || 100;
+      this.SpawnY = data.spawnY || 465;
+    }
 
-    this.physics.world.setBounds(0, 0, 1920, 1080)
-    this.cameras.main.startFollow(this.player, true, 0.09, 0.09)
-    this.cameras.main.setZoom(2)
-    this.cameras.main.setBounds(0, 0, 1920, 1080)
-  }
+    create() {
+        this.cameras.main.fadeIn(500, 0, 0, 0);
+        this.platforms = this.physics.add.staticGroup();
+        const currentGameKey = this.sys.settings.key;
+        this.scene.launch('UIScene', {
+          gameKey: currentGameKey
+        });
+        const map = this.make.tilemap({
+          key: 'map',
+          tileWidth: 128,
+          tileHeight: 128
+        });
+        const tileset = map.addTilesetImage('tiles');
+        const layer = map.createLayer(0, tileset, 0, 0);
 
-  update(time, delta) {
-    this.player.update(time, delta)
-    if (this.p.isDown) {
-      this.scene.run('PauseScene')
-      this.scene.pause('UIScene')
-      this.scene.pause()
+        const solidTiles = [0];
+
+        layer.setCollision(solidTiles);
+        layer.setCollisionByProperty({ collides: true });
+        layer.setScale(0.5);
+
+        this.exitZone = this.add.rectangle(1545, 384, 64, 128, 0xff0000).setOrigin(0, 0);
+        this.exitPlatform = this.add.rectangle(1537, 512, 200, 128, 0xff0000).setOrigin(0, 0);
+
+        this.physics.world.enable(this.exitPlatform);
+        this.exitPlatform.body.setAllowGravity(false).setImmovable(true);
+        this.physics.world.enable(this.exitZone);
+        this.exitZone.body.setAllowGravity(false).setImmovable();
+        this.p = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+        this.t = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+        this.player = new Player(this, this.SpawnX, this.SpawnY);
+        this.physics.add.collider(this.player, layer);
+        this.physics.add.collider(this.player, this.exitPlatform)
+        this.physics.add.overlap(
+          this.player,
+          this.exitZone,
+          () => {
+            this.enterPortal('GameScene2', 10, 465),
+            null,
+            this
+          }
+        )
+        const worldWidth = map.width * 64;
+        const worldHeight = map.height * 64;
+        this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
+        this.cameras.main.startFollow(this.player, true, 0.04, 0.04, 0, 0);
+        this.cameras.main.setZoom(2);
+        this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
+        this.currentScene = layer;
     }
-    if (this.t.isDown) {
-      this.cameras.main.setZoom(3)
-    } else {
-      this.cameras.main.setZoom(2)
-    }
+
+    update(time, delta) {
+      this.player.update(time, delta);
+      if (this.p.isDown) {
+          this.scene.run('PauseScene');
+          this.scene.pause('UIScene');
+          this.scene.pause();
+      }
+      if (this.t.isDown) {
+        this.cameras.main.setZoom(4);
+      } else {
+        this.cameras.main.setZoom(2);
+      }
   }
-  enterPortal() {
-    const entryData = {
-      from: 'left',
-    }
-    this.player.active = false
-    this.player.setVelocity(0, 0)
-    this.cameras.main.fade(500, 0, 0, 0)
+  enterPortal(exit, x, y) {
+    this.player.active = false;
+    this.player.setVelocity(0, 0);
+    this.cameras.main.fade(500, 0, 0, 0);
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (camera, effect) => {
-      this.scene.start('GameScene2')
-    })
+      this.scene.start(exit, {
+        spawnX: x,
+        spawnY: y
+      });
+    });
   }
+
 }
