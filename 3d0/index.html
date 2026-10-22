@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+  <title>ADAMGAME</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+</head>
+<body>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "/js/three.module.js",
+        "pointerlock": "https://unpkg.com/three@latest/examples/jsm/controls/PointerLockControls.js",
+        "cannon": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"
+      }
+    }
+  </script>
+
+  <div class="header">
+    <h1>Games</h1>
+  </div>
+
+  <script type="module" src="game.js"></script>
+
+  <div id="game-container">
+    <div id="hud">
+        <span id="coords">X: 0.00, Y: 0.00, Z: 0.00</span>
+      <div id="crosshair"></div>
+      <div id="buttons">
+        <div id="third"></div>
+        <div id="swap"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

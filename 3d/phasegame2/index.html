@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <title id="page-title"></title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/quantize/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/quantize/favicon/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <script type="importmap">
+        {
+          "imports": {
+            "three": "/js/three.module.js",
+            "pointerlock": "https://unpkg.com/three@latest/examples/jsm/controls/PointerLockControls.js",
+            "cannon": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"
+    }
+}
+    </script>
+    <div class="header"><h1 id="game-title"></h1></div>
+    <script type="module" src="game.js"></script>
+    <div id="game-container">
+      <div id="pmenu">
+        <div id="buttons"><div id="resume"></div><div id="options"></div><div id="character"></div></div>
+      </div>
+        <div id="hud">
+          <div id="crosshair" style="
+position: absolute;
+top: 50%; left: 50%;
+transform: translate(-50%, -50%);
+width: 16px; height: 16px;
+pointer-events: none;
+display: flex; align-items: center; justify-content: center;
+">
+<div style="position:absolute; width:2px; height:16px; background:white;"></div>
+<div style="position:absolute; width:16px; height:2px; background:white;"></div>
+</div>
+            <div id="stats">
+                <span id="pos">X: 0.00, Y: 0.00, Z: 0.00</span>
+                <div id="debug">
+                    <div id="grid" onclick="grid(); event.stopPropagation();"></div>
+                    <div id="lines" onclick="lines(); event.stopPropagation();"></div>
+                    <div id="swap" onclick="lines(); event.stopPropagation();"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
