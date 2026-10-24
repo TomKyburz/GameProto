@@ -9,8 +9,8 @@ const game = document.getElementById("3denv")
 // console.log(env)
 // game.style.backgroundColor = BACKGROUND;
 
-game.width = 800
-game.height = 800
+game.width = game.parentElement.clientWidth
+game.height = game.parentElement.clientHeight
 
 const ctx = game.getContext("2d")
 console.log(ctx)
@@ -50,7 +50,7 @@ function project({x, y, z}) {
     }
 }
 
-const FPS = 3000;
+const FPS = 1000;
 
 
 function translate_z({x, y, z}, dz) {
